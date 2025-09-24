@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Carreras{% endblock %}
+
+{% block content %}
+<h1>Lista de Programas de la Universidad de Colombia - Ingeniería de Sistemas</h1>
+<br>
+
+<table>
+    <thead>
+        <tr>
+            <td>Codigo</td>
+            <td>Carrera</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for registro in Carreras %}
+            <tr>
+                <td>{{ registro.0 }}</td>
+                <td>{{ registro.1 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

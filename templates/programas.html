@@ -1,8 +1,77 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Programas{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h2 class="display-5 mb-4">Registro de Materias</h2>
+    <p class="lead mb-5">Complete el formulario para registrar una nueva materia</p>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="bg-light bg-opacity-10 p-4 rounded-3">
+                <form action="{{ url_for('mision') }}" method="POST" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label for="materia" class="form-label">Nombre de la Materia</label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="materia" 
+                               name="materia" 
+                               placeholder="Ejemplo: Matemáticas Aplicadas"
+                               required>
+                        <div class="invalid-feedback">
+                            Por favor ingrese el nombre de la materia.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="semestre" class="form-label">Semestre</label>
+                        <select class="form-control form-control-lg" id="semestre" name="semestre" required>
+                            <option value="">Seleccione un semestre</option>
+                            <option value="1">Primer Semestre</option>
+                            <option value="2">Segundo Semestre</option>
+                            <option value="3">Tercer Semestre</option>
+                            <option value="4">Cuarto Semestre</option>
+                            <option value="5">Quinto Semestre</option>
+                            <option value="6">Sexto Semestre</option>
+                            <option value="7">Séptimo Semestre</option>
+                            <option value="8">Octavo Semestre</option>
+                            <option value="9">Noveno Semestre</option>
+                            <option value="10">Décimo Semestre</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor seleccione un semestre.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            Registrar Materia
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+                            Volver al Inicio
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% block title %} Programas {% endblock%}
-
-{% block content %} 
-    <h1>Programas</h1>    
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus maiores libero laudantium eaque autem est minus temporibus, dolore veniam debitis architecto asperiores qui dolorem magnam.</p>
-{% endblock%}
+<script>
+    // Validación del formulario con Bootstrap
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

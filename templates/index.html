@@ -1,11 +1,48 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <title>Proyecto ChatBox</title>
-</head>
-<body>
-    <h1>Universitaria de Colombia</h1>
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h2 class="display-5 mb-4">Bienvenido a la Universitaria de Colombia</h2>
+    <p class="lead mb-4">Descubre nuestra propuesta educativa de calidad y compromiso social</p>
     
-</body>
-<footer><a href="www.google.com">Visitenos en Internet</a></footer>
-</html>
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card bg-transparent border-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Nuestra Misión</h5>
+                    <p class="card-text">Conoce nuestro compromiso con la formación integral</p>
+                    <a href="{{ url_for('mision') }}" class="btn btn-outline-light">Ver Misión</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card bg-transparent border-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Nuestra Visión</h5>
+                    <p class="card-text">Descubre hacia dónde nos dirigimos como institución</p>
+                    <a href="{{ url_for('vision') }}" class="btn btn-outline-light">Ver Visión</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card bg-transparent border-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Programas Académicos</h5>
+                    <p class="card-text">Explora nuestra oferta educativa y registra materias</p>
+                    <a href="{{ url_for('programas') }}" class="btn btn-outline-light">Ver Programas</a>
+                </div>
+            </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-transparent border-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Lista de Carreras</h5>
+                    <p class="card-text">Conoce todas nuestras carreras profesionales disponibles</p>
+                    <a href="{{ url_for('listacarreras') }}" class="btn btn-outline-light">Ver Carreras</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

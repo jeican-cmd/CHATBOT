@@ -1,8 +1,47 @@
-{% extends 'base.html' %}
-
-{% block title %} Visión {% endblock%}
-
-{% block content %} 
-    <h1>Visión</h1>    
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus maiores libero laudantium eaque autem est minus temporibus, dolore veniam debitis architecto asperiores qui dolorem magnam.</p>
-{% endblock%}
+{% extends "base.html" %}
+{% block title %}Visión{% endblock %}
+{% block content %}
+<div class="text-center">
+    <div class="mb-4">
+        <img src="{{ url_for('static', filename='img/imagenlogop2.png') }}" alt="Logo Universitaria de Colombia" width="180" class="mb-3">
+    </div>
+    
+    <h2 class="display-5 mb-4">Visión de la Universidad</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="p-4 bg-light bg-opacity-10 rounded-3">
+                <p class="lead mb-4">
+                    Ser reconocidos como líderes en innovación educativa, destacándonos por nuestra 
+                    excelencia académica, investigación de vanguardia y formación integral de profesionales 
+                    comprometidos con el progreso social y el desarrollo sostenible.
+                </p>
+                
+                <p class="mb-0">
+                    Aspiramos a ser una institución de referencia nacional e internacional, que inspire 
+                    el cambio positivo en la sociedad a través del conocimiento, la creatividad y la 
+                    responsabilidad social.
+                </p>
+            </div>
+            
+            <div class="mt-4">
+                <h4 class="mb-3">Hacia el Futuro</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 bg-light bg-opacity-10 rounded">
+                            <h6>Innovación Tecnológica</h6>
+                            <p class="small">Integración de tecnologías avanzadas en el proceso educativo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 bg-light bg-opacity-10 rounded">
+                            <h6>Proyección Internacional</h6>
+                            <p class="small">Reconocimiento y colaboración a nivel global</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

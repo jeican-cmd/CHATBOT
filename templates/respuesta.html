@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Resultado{% endblock %}
+{% block content %}
+<div class="text-center">
+    <div class="mb-4">
+        {% if "exitoso" in mensaje %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">Registro Completado</h4>
+                <p class="mb-0">{{ mensaje }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="success-icon mb-4">
+                <svg width="80" height="80" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+            </div>
+        {% else %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">Error en el Registro</h4>
+                <p class="mb-0">{{ mensaje }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="error-icon mb-4">
+                <svg width="80" height="80" fill="currentColor" class="text-danger" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                </svg>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="mb-4">¿Qué deseas hacer ahora?</h3>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('programas') }}" class="btn btn-primary btn-lg">
+                    Registrar Otra Materia
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-lg">
+                    Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
