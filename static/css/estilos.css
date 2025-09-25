@@ -340,52 +340,622 @@ h1, h2, h3, h4, h5, h6 {
     100% { transform: scale(1); }
 }
 
-/* Lista de carreras específicos */
-.carrera-item {
+/* Estilos específicos para tabla de carreras */
+.tabla-carreras-container {
     background: var(--blanco);
-    color: var(--azul-primario);
+    border-radius: 20px;
     padding: 2rem;
-    margin: 1rem 0;
-    border-radius: 15px;
-    border-left: 5px solid var(--azul-claro);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.tabla-carreras-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--azul-primario), var(--azul-claro), var(--dorado));
+}
+
+.tabla-carreras {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    color: var(--azul-primario);
+}
+
+.tabla-header {
+    background: linear-gradient(135deg, var(--azul-primario), var(--azul-secundario));
+    color: var(--blanco);
+    padding: 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    border: none;
+}
+
+.tabla-header:first-child {
+    border-top-left-radius: 15px;
+}
+
+.tabla-header:last-child {
+    border-top-right-radius: 15px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.tabla-fila {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid var(--gris-medio);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.tabla-fila.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tabla-fila:hover {
+    background: linear-gradient(135deg, rgba(49, 130, 206, 0.05), rgba(26, 54, 93, 0.05));
+    transform: translateX(5px) scale(1.01);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-fila:last-child {
+    border-bottom: none;
+}
+
+.tabla-fila td {
+    padding: 1.5rem;
+    vertical-align: middle;
+    border: none;
+}
+
+.tabla-codigo {
+    width: 200px;
+    text-align: center;
+}
+
+.codigo-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--azul-claro), var(--azul-secundario));
+    color: var(--blanco);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
     transition: all 0.3s ease;
 }
 
-.carrera-item:hover {
-    transform: translateX(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border-left-color: var(--dorado);
+.tabla-fila:hover .codigo-badge {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
 }
 
-.carrera-titulo {
-    color: var(--azul-primario);
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+.tabla-carrera {
+    padding-left: 2rem;
 }
 
-.carrera-descripcion {
-    color: var(--azul-secundario);
-    margin-bottom: 1rem;
-    line-height: 1.7;
+.carrera-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.carrera-duracion {
-    color: var(--dorado);
+.carrera-nombre {
+    font-size: 1.2rem;
     font-weight: 600;
+    color: var(--azul-primario);
+    transition: color 0.3s ease;
+}
+
+.tabla-fila:hover .carrera-nombre {
+    color: var(--azul-claro);
+}
+
+.carrera-detalles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.texto-secundario {
+    color: var(--azul-secundario);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Estado vacío */
+.no-data {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--azul-secundario);
+}
+
+.no-data-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.no-data p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Información adicional */
+.info-adicional {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--blanco);
+}
+
+.info-stat {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-numero {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--dorado);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.stat-texto {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* Botones de acción */
+.acciones-container {
+    margin: 2rem 0;
+}
+
+.btn span {
+    margin-right: 0.5rem;
     font-size: 1.1rem;
 }
 
-.carrera-modalidad {
-    display: inline-block;
-    background: var(--azul-claro);
-    color: var(--blanco);
-    padding: 0.5rem 1rem;
+/* Estilos específicos para tabla de carreras */
+.tabla-carreras-container {
+    background: var(--blanco);
     border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.tabla-carreras-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--azul-primario), var(--azul-claro), var(--dorado));
+}
+
+.tabla-carreras {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    color: var(--azul-primario);
+}
+
+.tabla-header {
+    background: linear-gradient(135deg, var(--azul-primario), var(--azul-secundario));
+    color: var(--blanco);
+    padding: 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    border: none;
+}
+
+.tabla-header:first-child {
+    border-top-left-radius: 15px;
+}
+
+.tabla-header:last-child {
+    border-top-right-radius: 15px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.tabla-fila {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid var(--gris-medio);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.tabla-fila.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tabla-fila:hover {
+    background: linear-gradient(135deg, rgba(49, 130, 206, 0.05), rgba(26, 54, 93, 0.05));
+    transform: translateX(5px) scale(1.01);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-fila:last-child {
+    border-bottom: none;
+}
+
+.tabla-fila td {
+    padding: 1.5rem;
+    vertical-align: middle;
+    border: none;
+}
+
+.tabla-codigo {
+    width: 200px;
+    text-align: center;
+}
+
+.codigo-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--azul-claro), var(--azul-secundario));
+    color: var(--blanco);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+    transition: all 0.3s ease;
+}
+
+.tabla-fila:hover .codigo-badge {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+}
+
+.tabla-carrera {
+    padding-left: 2rem;
+}
+
+.carrera-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.carrera-nombre {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--azul-primario);
+    transition: color 0.3s ease;
+}
+
+.tabla-fila:hover .carrera-nombre {
+    color: var(--azul-claro);
+}
+
+.carrera-detalles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.texto-secundario {
+    color: var(--azul-secundario);
     font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Estilos para botones de acciones en la tabla */
+.tabla-acciones {
+    text-align: center;
+    padding: 1.5rem !important;
+    width: 220px;
+}
+
+.acciones-botones {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
     font-weight: 500;
-    margin-top: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-sm span {
+    font-size: 1rem;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: var(--azul-primario);
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    color: var(--azul-primario);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: var(--blanco);
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    color: var(--blanco);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+}
+
+/* Estado vacío */
+.no-data {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--azul-secundario);
+}
+
+.no-data-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.no-data p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Información adicional */
+.info-adicional {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--blanco);
+}
+
+.info-stat {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-numero {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--dorado);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.stat-texto {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* Botones de acción */
+.acciones-container {
+    margin: 2rem 0;
+}
+
+.btn span {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Responsive para tabla */
+@media (max-width: 768px) {
+    .tabla-carreras-container {
+        padding: 1rem;
+    }
+    
+    .tabla-header {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .tabla-fila td {
+        padding: 1rem;
+    }
+    
+    .tabla-codigo {
+        width: auto;
+    }
+    
+    .codigo-badge {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .carrera-nombre {
+        font-size: 1.1rem;
+    }
+    
+    .tabla-carrera {
+        padding-left: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .info-adicional {
+        padding: 1.5rem;
+    }
+    
+    .stat-numero {
+        font-size: 2.5rem;
+    }
+    
+    /* Responsive para botones de acciones */
+    .tabla-acciones {
+        width: auto;
+        padding: 1rem !important;
+    }
+    
+    .acciones-botones {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-sm span {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .tabla-carreras {
+        font-size: 0.9rem;
+    }
+    
+    .codigo-badge {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .carrera-nombre {
+        font-size: 1rem;
+    }
+    
+    .stat-numero {
+        font-size: 2rem;
+    }
+    
+    .acciones-botones {
+        flex-direction: row;
+        gap: 0.3rem;
+    }
+    
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+        width: auto;
+    }
+    
+    .btn-sm span {
+        margin-right: 0;
+    }
+    
+    /* Ocultar texto en móviles muy pequeños, solo mostrar iconos */
+    .btn-sm {
+        text-indent: -9999px;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .btn-sm span {
+        text-indent: 0;
+        position: absolute;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .tabla-carreras {
+        font-size: 0.9rem;
+    }
+    
+    .codigo-badge {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .carrera-nombre {
+        font-size: 1rem;
+    }
+    
+    .stat-numero {
+        font-size: 2rem;
+    }
+    
+    .btn span {
+        display: none;
+    }
 }
 
 /* Footer */

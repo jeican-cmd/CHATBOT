@@ -3,24 +3,80 @@
 {% block title %}Lista de Carreras{% endblock %}
 
 {% block content %}
-<h1>Lista de Programas de la Universidad de Colombia - Ingeniería de Sistemas</h1>
-<br>
+<h1 style="color: white; text-align: center; margin-bottom: 30px;">
+    Lista de Programas de la Universidad de Colombia
+</h1>
 
-<table>
-    <thead>
-        <tr>
-            <td>Codigo</td>
-            <td>Carrera</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for registro in Carreras %}
+<div style="background: white; border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 1000px;">
+    <table class="table table-striped" style="margin: 0;">
+        <thead style="background: #1a365d; color: white;">
             <tr>
-                <td>{{ registro.0 }}</td>
-                <td>{{ registro.1 }}</td>
+                <th style="padding: 15px; text-align: center; font-weight: bold;">CÓDIGO</th>
+                <th style="padding: 15px; text-align: center; font-weight: bold;">CARRERA</th>
+                <th style="padding: 15px; text-align: center; font-weight: bold;">ACCIONES</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% if Carreras %}
+                {% for registro in Carreras %}
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 15px; text-align: center; font-weight: bold; color: #1a365d;">
+                            {{ registro.0 }}
+                        </td>
+                        <td style="padding: 15px; color: #333; font-size: 16px;">
+                            {{ registro.1 }}
+                        </td>
+                        <td style="padding: 15px; text-align: center;">
+                            <a href="/actualizar/{{ registro.0 }}" 
+                               style="background: #ffc107; color: #1a365d; padding: 8px 15px; border-radius: 5px; 
+                                      text-decoration: none; margin-right: 10px; font-weight: bold;">
+                                 Actualizar
+                            </a>
+                            <a href="/eliminar/{{ registro.0 }}" 
+                               style="background: #dc3545; color: white; padding: 8px 15px; border-radius: 5px; 
+                                      text-decoration: none; font-weight: bold;"
+                               onclick="return confirm('¿Estás seguro de eliminar esta carrera {{ registro.1 }}?')">
+                                 Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" style="padding: 30px; text-align: center; color: #666;">
+                        <h3>No hay carreras registradas</h3>
+                        <p>No se encontraron datos en la base de datos</p>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Debug: Mostrar información -->
+<div style="background: rgba(255,255,255,0.1); padding: 15px; margin: 20px; border-radius: 10px; color: white;">
+    <h4>Información de Debug:</h4>
+    <p>Total de carreras encontradas: {{ Carreras|length if Carreras else 0 }}</p>
+    {% if Carreras %}
+        <p>Datos disponibles: SÍ</p>
+        <p>Primera carrera: {{ Carreras[0][0] }} - {{ Carreras[0][1] }}</p>
+    {% else %}
+        <p>Datos disponibles: NO</p>
+        <p style="color: #ffc107;">Posible problema: La variable 'Carreras' está vacía o no se está pasando desde main.py</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ url_for('programas') }}" 
+       style="background: #1a365d; color: white; padding: 12px 25px; border-radius: 8px; 
+              text-decoration: none; margin-right: 15px; font-weight: bold;">
+         Registrar Materias
+    </a>
+    <a href="{{ url_for('index') }}" 
+       style="background: transparent; color: white; border: 2px solid white; padding: 12px 25px; 
+              border-radius: 8px; text-decoration: none; font-weight: bold;">
+         Volver al Inicio
+    </a>
+</div>
 
 {% endblock %}

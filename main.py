@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -83,20 +83,49 @@ def mision():
 
 @app.route("/listacarreras")
 def listacarreras():
-    # Conectar a la base de datos y obtener las carreras
+    print("Ejecutando listacarreras()")  # Debug
+    conn = sqlite3.connect("basedatos.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT codigo, nombre FROM carreras ORDER BY codigo")
+    carreras_data = cursor.fetchall()
+    print(f"Carreras encontradas: {len(carreras_data)}")  # Debug
+    print(f"Datos: {carreras_data}")  # Debug
+    conn.close()
+    return render_template("listacarreras.html", Carreras=carreras_data)
+
+
+@app.route("/eliminar/<codigo>")
+def eliminar(codigo):
+    # Conectar a la base de datos
     conn = sqlite3.connect("basedatos.db")
     cursor = conn.cursor()
     
-    # Ejecutar consulta para obtener todas las carreras
-    cursor.execute("SELECT codigo, nombre FROM carreras ORDER BY codigo")
-    carreras_data = cursor.fetchall()
-    
-    # Cerrar conexión
+    # Eliminar la carrera por código
+    cursor.execute("DELETE FROM carreras WHERE codigo = ?", (codigo,))
+    conn.commit()
     conn.close()
     
-    # Renderizar template pasando los datos
-    return render_template("listacarreras.html", Carreras=carreras_data)
+    # Redirigir a la lista de carreras
+    return redirect(url_for('listacarreras'))
+
+@app.route("/actualizar/<codigo>",methods=["GET", "POST"])
+def actualizar(codigo):
+    # Conectar a la base de datos para obtener los datos de la carrera
+    conn = sqlite3.connect("basedatos.db")
+    cursor = conn.cursor()
+    
+    # Obtener la carrera específica
+    cursor.execute("SELECT codigo, nombre FROM carreras WHERE codigo = ?", (codigo,))
+    carrera = cursor.fetchone()
+    conn.close()
+    
+    if carrera == "POST":
+        # Renderizar un template para actualizar (necesitarás crear este template)
+        return render_template("actualizar.html", carrera=carrera)
+    else:
+        # Si no existe la carrera, redirigir a la lista
+        return redirect(url_for('listacarreras'))
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port = 81, debug=True)

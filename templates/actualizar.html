@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Actualizar Carrera{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-5">Actualizar Carrera</h1>
+        <p class="lead">Modifica los datos de la carrera seleccionada</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div style="background: white; border-radius: 15px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+                
+                {% if carrera %}
+                    <form action="{{ url_for('actualizar_carrera') }}" method="POST" style="color: #1a365d;">
+                        <!-- Campo oculto para el código original -->
+                        <input type="hidden" name="codigo_original" value="{{ carrera[0] }}">
+                        
+                        <div class="mb-4">
+                            <label for="codigo" class="form-label" style="font-weight: 600; color: #1a365d; font-size: 1.1rem;">
+                                Código de la Carrera
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="codigo" 
+                                   name="codigo" 
+                                   value="{{ carrera[0] }}"
+                                   placeholder="Ejemplo: ING001"
+                                   required
+                                   style="border: 2px solid #e2e8f0; border-radius: 10px; padding: 1rem;">
+                            <small class="form-text" style="color: #666;">
+                                El código debe ser único y seguir el formato: ABC123
+                            </small>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="nombre" class="form-label" style="font-weight: 600; color: #1a365d; font-size: 1.1rem;">
+                                Nombre de la Carrera
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="nombre" 
+                                   name="nombre" 
+                                   value="{{ carrera[1] }}"
+                                   placeholder="Ejemplo: Ingeniería de Sistemas"
+                                   required
+                                   style="border: 2px solid #e2e8f0; border-radius: 10px; padding: 1rem;">
+                            <small class="form-text" style="color: #666;">
+                                Ingresa el nombre completo de la carrera
+                            </small>
+                        </div>
+                        
+                        <div class="alert" style="background: #e3f2fd; border-left: 5px solid #2196f3; padding: 1rem; margin: 1.5rem 0;">
+                            <h6 style="color: #1565c0; margin-bottom: 0.5rem;">📝 Datos Actuales:</h6>
+                            <p style="margin: 0; color: #333;">
+                                <strong>Código:</strong> {{ carrera[0] }} | 
+                                <strong>Nombre:</strong> {{ carrera[1] }}
+                            </p>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg" 
+                                    style="background: linear-gradient(135deg, #28a745, #20c997); color: white; 
+                                           border: none; border-radius: 10px; padding: 1rem; font-weight: 600;
+                                           text-transform: uppercase; letter-spacing: 1px;">
+                                💾 Guardar Cambios
+                            </button>
+                            
+                            <a href="{{ url_for('listacarreras') }}" class="btn btn-lg"
+                               style="background: #6c757d; color: white; border: none; border-radius: 10px; 
+                                      padding: 1rem; font-weight: 600; text-decoration: none; text-align: center;
+                                      text-transform: uppercase; letter-spacing: 1px;">
+                                ❌ Cancelar
+                            </a>
+                        </div>
+                    </form>
+                    
+                {% else %}
+                    <div class="text-center" style="color: #dc3545;">
+                        <h3>❌ Error</h3>
+                        <p>No se encontró la carrera especificada.</p>
+                        <a href="{{ url_for('listacarreras') }}" class="btn btn-primary">
+                            Volver a Lista de Carreras
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Información adicional -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 1.5rem; color: white;">
+                <h5>💡 Consejos para actualizar:</h5>
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    <li>Asegúrate de que el código sea único</li>
+                    <li>El nombre debe ser descriptivo y claro</li>
+                    <li>Revisa los datos antes de guardar</li>
+                    <li>Los cambios se aplicarán inmediatamente</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validación del formulario
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const codigoInput = document.getElementById('codigo');
+    const nombreInput = document.getElementById('nombre');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            let mensaje = '';
+            
+            // Validar código
+            if (codigoInput.value.trim().length < 3) {
+                isValid = false;
+                mensaje += 'El código debe tener al menos 3 caracteres.\n';
+            }
+            
+            // Validar nombre
+            if (nombreInput.value.trim().length < 5) {
+                isValid = false;
+                mensaje += 'El nombre debe tener al menos 5 caracteres.\n';
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor corrige los siguientes errores:\n\n' + mensaje);
+                return false;
+            }
+            
+            // Confirmación final
+            const confirmacion = confirm(
+                '¿Estás seguro de actualizar esta carrera?\n\n' +
+                'Código: ' + codigoInput.value + '\n' +
+                'Nombre: ' + nombreInput.value
+            );
+            
+            if (!confirmacion) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+    
+    // Efectos visuales
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.borderColor = '#3182ce';
+            this.style.boxShadow = '0 0 0 0.2rem rgba(49, 130, 206, 0.25)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.style.borderColor = '#e2e8f0';
+            this.style.boxShadow = 'none';
+        });
+    });
+});
+</script>
+
+{% endblock %}
