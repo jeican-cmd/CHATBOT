@@ -8,49 +8,40 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <div class="bg-light bg-opacity-10 p-4 rounded-3">
-                <form action="{{ url_for('mision') }}" method="POST" class="needs-validation" novalidate>
-                    <div class="mb-4">
-                        <label for="materia" class="form-label">Nombre de la Materia</label>
-                        <input type="text" 
-                               class="form-control form-control-lg" 
-                               id="materia" 
-                               name="materia" 
-                               placeholder="Ejemplo: Matemáticas Aplicadas"
-                               required>
-                        <div class="invalid-feedback">
-                            Por favor ingrese el nombre de la materia.
+                <h2 class="display-5 mb-4">Listado de Materias</h2>
+                <p class="lead mb-5">A continuación aparecen las materias registradas en el sistema.</p>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="bg-light bg-opacity-10 p-4 rounded-3">
+                            {% if materias and materias|length > 0 %}
+                                <table class="table table-striped text-start">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Semestre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for m in materias %}
+                                            <tr>
+                                                <td>{{ m[0] }}</td>
+                                                <td>{{ m[1] }}</td>
+                                                <td>{{ m[2] }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <div class="no-data text-center p-4">
+                                    <p>No hay materias registradas aún.</p>
+                                    <a href="{{ url_for('mision') }}" class="btn btn-primary">Registrar una materia</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                    
-                    <div class="mb-4">
-                        <label for="semestre" class="form-label">Semestre</label>
-                        <select class="form-control form-control-lg" id="semestre" name="semestre" required>
-                            <option value="">Seleccione un semestre</option>
-                            <option value="1">Primer Semestre</option>
-                            <option value="2">Segundo Semestre</option>
-                            <option value="3">Tercer Semestre</option>
-                            <option value="4">Cuarto Semestre</option>
-                            <option value="5">Quinto Semestre</option>
-                            <option value="6">Sexto Semestre</option>
-                            <option value="7">Séptimo Semestre</option>
-                            <option value="8">Octavo Semestre</option>
-                            <option value="9">Noveno Semestre</option>
-                            <option value="10">Décimo Semestre</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Por favor seleccione un semestre.
-                        </div>
-                    </div>
-                    
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            Registrar Materia
-                        </button>
-                        <a href="{{ url_for('index') }}" class="btn btn-outline-light">
-                            Volver al Inicio
-                        </a>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

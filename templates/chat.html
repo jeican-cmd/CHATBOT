@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="display-5 mb-4">Chat con el modelo</h2>
+    <p class="lead mb-4">Conecta tu API de Gemini en el frontend o usa el endpoint /api/chat en el backend.</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="bg-light bg-opacity-10 p-4 rounded-3">
+                <div id="chat-box" style="height: 400px; overflow-y: auto; background: white; color: black; padding: 1rem; border-radius: 8px;">
+                    <!-- mensajes aparecerán aquí -->
+                </div>
+
+                <form id="chat-form" class="mt-3">
+                    <div class="input-group">
+                        <input id="message" type="text" class="form-control" placeholder="Escribe tu mensaje..." autocomplete="off">
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                    </div>
+                </form>
+
+                <p class="small mt-2 text-muted">Nota: este es un placeholder. Reemplaza la llamada fetch a /api/chat con tu integración a Gemini.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('chat-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const input = document.getElementById('message');
+    const text = input.value.trim();
+    if(!text) return;
+
+    const chatBox = document.getElementById('chat-box');
+    const userDiv = document.createElement('div');
+    userDiv.style.textAlign = 'right';
+    userDiv.innerHTML = `<div style="display:inline-block; background:#1a365d; color:white; padding:8px 12px; border-radius:12px; margin:6px 0;">${text}</div>`;
+    chatBox.appendChild(userDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Llamada al endpoint local; usuario reemplazará por Gemini
+    const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: text})
+    });
+    const data = await resp.json();
+
+    const botDiv = document.createElement('div');
+    botDiv.style.textAlign = 'left';
+    botDiv.innerHTML = `<div style="display:inline-block; background:#e9ecef; color:#111; padding:8px 12px; border-radius:12px; margin:6px 0;">${data.reply}</div>`;
+    chatBox.appendChild(botDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    input.value = '';
+});
+</script>
+{% endblock %}
