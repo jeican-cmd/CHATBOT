@@ -14,7 +14,7 @@
             <div style="background: white; border-radius: 15px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
                 
                 {% if carrera %}
-                    <form action="{{ url_for('actualizar_carrera') }}" method="POST" style="color: #1a365d;">
+                    <form action="{{ url_for('actualizar', codigo=carrera[0]) }}" method="POST" style="color: #1a365d;">
                         <!-- Campo oculto para el código original -->
                         <input type="hidden" name="codigo_original" value="{{ carrera[0] }}">
                         

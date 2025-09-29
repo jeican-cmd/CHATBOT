@@ -1,5 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
+import os
+try:
+    import requests
+except Exception:
+    requests = None
 
 app = Flask(__name__)
 
@@ -191,12 +196,39 @@ def chat():
 
 @app.route('/api/chat', methods=['POST'])
 def api_chat():
-    # Endpoint placeholder para que el usuario conecte su API de Gemini.
+    # Endpoint que intenta usar Gemini si la variable de entorno GEMINI_API_KEY está configurada.
     data = request.get_json() or {}
     user_message = data.get('message') or ''
 
-    # Simple echo/respuesta placeholder. El usuario reemplazará este bloque
-    # para integrar con Gemini u otro LLM.
+    api_key = os.environ.get('GEMINI_API_KEY')
+    api_url = os.environ.get('GEMINI_API_URL')  # opcional, por si se quiere apuntar a otro host
+
+    if api_key:
+        # Ejemplo de llamada HTTP; ajustar según el endpoint real de Gemini que uses.
+        url = api_url or 'https://api.gemini.example/v1/generate'
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            'input': user_message,
+            # Añade aquí otros parámetros de tu request según la API de Gemini
+        }
+
+        try:
+            if not requests:
+                raise RuntimeError('La librería requests no está instalada en el entorno. Instálala con: pip install requests')
+            resp = requests.post(url, headers=headers, json=payload, timeout=15)
+            resp.raise_for_status()
+            body = resp.json()
+            # Aquí se asume que la respuesta contiene un campo 'output' o similar.
+            reply = body.get('output') or body.get('reply') or str(body)
+            return jsonify({'reply': reply})
+        except Exception as e:
+            # En caso de error con Gemini, devolvemos mensaje de error legible
+            return jsonify({'reply': f'Error al conectar con Gemini: {e}'}), 500
+
+    # Fallback: comportamiento placeholder local
     response_text = f"(placeholder) recibí: {user_message}"
     return jsonify({'reply': response_text})
 
