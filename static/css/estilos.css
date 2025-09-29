@@ -397,9 +397,27 @@ h1, h2, h3, h4, h5, h6 {
     gap: 1rem;
 }
 
-.header-icon {
-    font-size: 1.2rem;
-    opacity: 0.8;
+
+
+/* Chat widget: botón flotante y panel */
+#chat-widget{position:fixed;right:20px;bottom:20px;z-index:1100;font-family:inherit}
+#chat-open-btn{width:56px;height:56px;border-radius:50%;border:none;background:var(--azul-primario);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px var(--sombra-fuerte);cursor:pointer}
+#chat-open-btn img{filter:brightness(0) invert(1);width:28px;height:28px}
+#chat-panel{width:320px;max-width:90vw;height:420px;background:var(--blanco);color:var(--azul-primario);border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.2);display:flex;flex-direction:column;overflow:hidden;margin-bottom:10px}
+#chat-panel #chat-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--gris-medio);background:linear-gradient(90deg,var(--azul-primario),var(--azul-claro));color:var(--blanco)}
+#chat-panel #chat-header button{background:transparent;border:none;color:inherit;font-size:16px;cursor:pointer}
+#chat-messages{flex:1;padding:12px;overflow-y:auto;background:linear-gradient(180deg, #fff, #f7f9fb)}
+.chat-msg{margin:6px 0;padding:8px 12px;border-radius:12px;max-width:85%;word-wrap:break-word}
+.chat-user{margin-left:auto;background:var(--azul-primario);color:var(--blanco)}
+.chat-bot{margin-right:auto;background:#f1f3f5;color:var(--azul-primario);border:1px solid var(--gris-medio)}
+#chat-inline-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--gris-medio)}
+#chat-inline-form input{flex:1;padding:10px;border-radius:8px;border:1px solid var(--gris-medio)}
+#chat-inline-form button{padding:8px 12px;border-radius:8px;border:none;background:var(--azul-primario);color:var(--blanco);cursor:pointer}
+.chat-note{padding:8px 12px;background:transparent;color:var(--azul-primario);text-align:center}
+
+@media(max-width:560px){
+    #chat-panel{width:92vw;right:8px;left:8px;bottom:80px}
+    #chat-widget{right:10px;bottom:12px}
 }
 
 .tabla-fila {
