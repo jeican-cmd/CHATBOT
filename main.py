@@ -204,33 +204,110 @@ def api_chat():
     api_url = os.environ.get('GEMINI_API_URL')  # opcional, por si se quiere apuntar a otro host
 
     if api_key:
-        # Ejemplo de llamada HTTP; ajustar según el endpoint real de Gemini que uses.
-        url = api_url or 'https://api.gemini.example/v1/generate'
-        headers = {
-            'Authorization': f'Bearer {api_key}',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            'input': user_message,
-            # Añade aquí otros parámetros de tu request según la API de Gemini
-        }
+        # Use the configured API URL or fall back to a safe default
+        url = api_url or 'https://generativelanguage.googleapis.com/v1beta/models/text-bison:generateContent'
+
+        # Detect Google Generative Language endpoint and adapt headers/payload
+        is_google_gen = 'generativelanguage.googleapis.com' in url or 'googleapis.com' in url
 
         try:
             if not requests:
                 raise RuntimeError('La librería requests no está instalada en el entorno. Instálala con: pip install requests')
-            resp = requests.post(url, headers=headers, json=payload, timeout=15)
+
+            if is_google_gen:
+                # Google example: use X-goog-api-key header and the generateContent payload
+                headers = {
+                    'Content-Type': 'application/json',
+                    'X-goog-api-key': api_key
+                }
+                payload = {
+                    'contents': [
+                        {
+                            'parts': [
+                                { 'text': user_message }
+                            ]
+                        }
+                    ]
+                }
+                resp = requests.post(url, headers=headers, json=payload, timeout=20)
+            else:
+                headers = {
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json'
+                }
+                payload = { 'input': user_message }
+                resp = requests.post(url, headers=headers, json=payload, timeout=20)
+
             resp.raise_for_status()
             body = resp.json()
-            # Aquí se asume que la respuesta contiene un campo 'output' o similar.
-            reply = body.get('output') or body.get('reply') or str(body)
+
+            # Heuristic: buscar recursivamente el texto más probable en la respuesta
+            def find_text(obj):
+                if obj is None:
+                    return None
+                if isinstance(obj, str):
+                    return obj
+                if isinstance(obj, dict):
+                    # keys that often contain text
+                    for k in ('text', 'content', 'output', 'message', 'reply'):
+                        if k in obj and isinstance(obj[k], (str, dict)):
+                            v = obj[k]
+                            if isinstance(v, str):
+                                return v
+                            # if dict, try deeper
+                            deeper = find_text(v)
+                            if deeper:
+                                return deeper
+
+                    # candidates array
+                    if 'candidates' in obj and isinstance(obj['candidates'], list) and len(obj['candidates'])>0:
+                        for cand in obj['candidates']:
+                            res = find_text(cand)
+                            if res:
+                                return res
+
+                    # items / outputs
+                    for k in ('items', 'outputs', 'result'):
+                        if k in obj:
+                            res = find_text(obj[k])
+                            if res:
+                                return res
+
+                    # otherwise search all values
+                    for v in obj.values():
+                        res = find_text(v)
+                        if res:
+                            return res
+                    return None
+
+                if isinstance(obj, list):
+                    for item in obj:
+                        res = find_text(item)
+                        if res:
+                            return res
+                    return None
+
+                return None
+
+            reply = find_text(body)
+            if not reply:
+                try:
+                    import json as _json
+                    reply = _json.dumps(body)
+                except Exception:
+                    reply = str(body)
+
             return jsonify({'reply': reply})
         except Exception as e:
-            # En caso de error con Gemini, devolvemos mensaje de error legible
             return jsonify({'reply': f'Error al conectar con Gemini: {e}'}), 500
 
     # Fallback: comportamiento placeholder local
     response_text = f"(placeholder) recibí: {user_message}"
     return jsonify({'reply': response_text})
+
+import requests
+r = requests.post('http://127.0.0.1:81/api/chat', json={'message':'Explain how AI works in a few words'})
+print(r.status_code, r.json())
 
 if __name__ == "__main__":
     init_db()
