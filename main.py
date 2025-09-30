@@ -305,10 +305,7 @@ def api_chat():
     response_text = f"(placeholder) recibí: {user_message}"
     return jsonify({'reply': response_text})
 
-import requests
-r = requests.post('http://127.0.0.1:81/api/chat', json={'message':'Explain how AI works in a few words'})
-print(r.status_code, r.json())
 
 if __name__ == "__main__":
     init_db()
-    app.run(host='0.0.0.0',port = 81, debug=True)
+    app.run(host='0.0.0.0', port=81, debug=True)
