@@ -16,7 +16,7 @@ import logging
 MAX_HISTORY = 4
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 # Configurar sesiones en el servidor (filesystem) si flask_session está disponible
 if Session:
     app.config['SESSION_TYPE'] = 'filesystem'
@@ -270,6 +270,7 @@ def send_to_gemini(user_message: str):
         if is_google_gen:
             headers = {'Content-Type': 'application/json', 'X-goog-api-key': api_key}
             payload = {'contents': [{'parts': [{'text': user_message}]}]}
+            logging.debug('Prepared payload snippet: %s', str(payload)[:300])
             logging.info('Calling Google Generative endpoint %s', url)
             resp = requests.post(url, headers=headers, json=payload, timeout=20)
         else:
@@ -284,11 +285,18 @@ def send_to_gemini(user_message: str):
         try:
             body = resp.json()
             import json as _json
-            body_snippet = _json.dumps(body)[:500]
-            logging.info('Response body snippet: %s', body_snippet)
+            body_snippet = _json.dumps(body)[:2000]
+            logging.debug('Response body snippet: %s', body_snippet)
         except Exception:
             body = resp.text
-            logging.info('Response text (non-json) snippet: %s', str(body)[:500])
+            logging.debug('Response text (non-json) snippet: %s', str(body)[:2000])
+
+        # Log headers (without exposing sensitive fields)
+        try:
+            headers_snippet = {k: v for k, v in resp.headers.items() if k.lower() not in ('set-cookie',)}
+            logging.debug('Response headers: %s', headers_snippet)
+        except Exception:
+            logging.debug('Could not read response headers')
 
         resp.raise_for_status()
 
