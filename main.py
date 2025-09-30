@@ -16,7 +16,7 @@ import logging
 MAX_HISTORY = 4
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 # Configurar sesiones en el servidor (filesystem) si flask_session está disponible
 if Session:
     app.config['SESSION_TYPE'] = 'filesystem'
@@ -307,6 +307,20 @@ def send_to_gemini(user_message: str):
             if isinstance(obj, str):
                 return obj
             if isinstance(obj, dict):
+                # If Google Generative response with 'candidates' -> content -> parts[*].text
+                if 'candidates' in obj and isinstance(obj['candidates'], list) and len(obj['candidates'])>0:
+                    cand = obj['candidates'][0]
+                    # try to get content.parts[*].text
+                    if isinstance(cand, dict) and 'content' in cand and isinstance(cand['content'], dict):
+                        cont = cand['content']
+                        if 'parts' in cont and isinstance(cont['parts'], list):
+                            texts = []
+                            for p in cont['parts']:
+                                if isinstance(p, dict) and 'text' in p and isinstance(p['text'], str):
+                                    texts.append(p['text'])
+                            if texts:
+                                return ''.join(texts).strip()
+
                 # Common keys
                 for k in ('text', 'content', 'output', 'message', 'reply'):
                     if k in obj:
